@@ -1,5 +1,5 @@
 triggers:
-  /test:
+  /ariane-test:
     workflows:
     - conformance-aks.yaml
     - conformance-aws-cni.yaml
