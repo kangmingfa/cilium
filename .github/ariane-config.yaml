@@ -1,5 +1,5 @@
 triggers:
-  /test-backport-1.11:
+  /ariane-test-backport-1.11:
     workflows:
     - conformance-aws-cni.yaml
     - conformance-clustermesh.yaml
