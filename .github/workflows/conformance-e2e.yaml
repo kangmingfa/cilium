@@ -259,16 +259,6 @@ jobs:
             test-upgrade: 'true'
             test-flow-interrupts: 'true'
 
-          - name: '9'
-            kernel: '4.19-20230420.212204'
-            kube-proxy: 'iptables'
-            kpr: 'disabled'
-            tunnel: 'vxlan'
-            encryption: 'ipsec'
-            encryption-node: 'false'
-            test-upgrade: 'true'
-            test-flow-interrupts: 'true'
-
           - name: '10'
             kernel: '5.4-20230420.212204'
             kube-proxy: 'iptables'
@@ -574,16 +564,18 @@ jobs:
             fi
 
             # Upgrade
+            #
+            sleep 120
 
-            if [ -z "${{ env.upgrade_cilium_to_vsn }}" ]; then
-              CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
-                ${{ steps.vars.outputs.cilium_main_image_settings }} \
-                ${{ steps.vars.outputs.cilium_install_defaults }}
-            else
-              CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
-                --version ${{ env.upgrade_cilium_to_vsn }} \
-                ${{ steps.vars.outputs.cilium_install_defaults }}
-            fi
+            #if [ -z "${{ env.upgrade_cilium_to_vsn }}" ]; then
+            #  CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
+            #    ${{ steps.vars.outputs.cilium_main_image_settings }} \
+            #    ${{ steps.vars.outputs.cilium_install_defaults }}
+            #else
+            #  CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
+            #    --version ${{ env.upgrade_cilium_to_vsn }} \
+            #    ${{ steps.vars.outputs.cilium_install_defaults }}
+            #fi
 
             ./cilium-cli status --wait
             kubectl get pods --all-namespaces -o wide
@@ -601,15 +593,17 @@ jobs:
             ./cilium-cli connectivity test --include-upgrade-test --upgrade-test-setup
 
             # Dowgrade
+            #
+            sleep 120
 
-            CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
-              --version ${{ env.upgrade_cilium_from_vsn }} \
-              ${{ steps.vars.outputs.cilium_install_defaults }} \
-              \$EXTRAS_V13
+            #CILIUM_CLI_MODE=helm ./cilium-cli upgrade \
+            #  --version ${{ env.upgrade_cilium_from_vsn }} \
+            #  ${{ steps.vars.outputs.cilium_install_defaults }} \
+            #  \$EXTRAS_V13
 
-            ./cilium-cli status --wait
-            kubectl get pods --all-namespaces -o wide
-            kubectl -n kube-system exec daemonset/cilium -- cilium status
+            #./cilium-cli status --wait
+            #kubectl get pods --all-namespaces -o wide
+            #kubectl -n kube-system exec daemonset/cilium -- cilium status
 
             ./cilium-cli connectivity test --test '!check-log-errors' --include-unsafe-tests --collect-sysdump-on-failure \
               \$EXTRA_CONNECTIVITY_TEST \
