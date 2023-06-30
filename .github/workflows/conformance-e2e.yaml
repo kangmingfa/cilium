@@ -266,6 +266,8 @@ jobs:
             tunnel: 'vxlan'
             encryption: 'ipsec'
             encryption-node: 'false'
+            test-upgrade: 'true'
+            test-flow-interrupts: 'true'
 
           - name: '10'
             kernel: '5.4-20230420.212204'
