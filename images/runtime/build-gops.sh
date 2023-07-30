@@ -20,7 +20,8 @@ cd gops
 git checkout -b "${gops_version}" "${gops_version}"
 git --no-pager remote -v
 git --no-pager log -1
-
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
 for arch in amd64 arm64 ; do
   mkdir -p "/out/linux/${arch}/bin"
   GOARCH="${arch}" CGO_ENABLED=0 go build -ldflags "-s -w" -o "/out/linux/${arch}/bin/gops" github.com/google/gops

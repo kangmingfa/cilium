@@ -29,6 +29,7 @@ RUN /out/${BUILDPLATFORM}/bin/hubble completion bash > /out/linux/bash_completio
 #
 FROM --platform=${BUILDPLATFORM} ${CILIUM_BUILDER_IMAGE} as builder
 
+USER root
 # TARGETOS is an automatic platform ARG enabled by Docker BuildKit.
 ARG TARGETOS
 # TARGETARCH is an automatic platform ARG enabled by Docker BuildKit.
